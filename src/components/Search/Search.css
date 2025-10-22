@@ -1,0 +1,50 @@
+/* components/Search/Search.css */
+form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 1352px; 
+  height: 40px; 
+  margin: 0 auto;
+  padding: 0;
+}
+
+form svg {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.Search-content-list-section {
+  width: 323.5px;
+  height: 40px;
+  padding: 10px 8px;
+  border: none;
+  border-bottom: 0.842px solid #F0F0F0;
+  outline: none;
+  font-family: Public Sans Web, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-size: 14.4px;
+}
+
+.Search-content-list-section:focus{
+  outline: .25rem solid #2491ff;
+  outline-offset: 0;
+}
+
+form button {
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid #959599;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  text-align: center;
+  color: #58585b;
+  margin-right: .75rem;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+form button:hover{
+  color: #000;
+  border-color: #000;
+}
