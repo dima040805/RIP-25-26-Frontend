@@ -56,3 +56,65 @@ body {
     width: 100%;
   }
 }
+
+@media (max-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+/* Добавляем в конец PlanetsPage.css */
+
+/* Мобильные стили для поиска и карточек */
+@media (max-width: 768px) {
+  .services-wrapper {
+    padding: 15px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .services-search {
+    margin-bottom: 20px;
+  }
+  
+  .services-search-form {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .search-input {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 16px; /* Убираем zoom на iOS */
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 0;
+  }
+  
+  /* Убедимся что ничего не выходит за экран */
+  .services-wrapper h1 {
+    font-size: 1.5rem;
+    word-wrap: break-word;
+  }
+}
+
+/* Маленькие мобильные */
+@media (max-width: 480px) {
+  .services-wrapper {
+    padding: 10px;
+  }
+  
+  .services-grid {
+    gap: 10px;
+  }
+  
+  .search-input {
+    padding: 12px;
+    font-size: 16px;
+  }
+}

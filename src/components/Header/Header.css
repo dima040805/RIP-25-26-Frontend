@@ -22,3 +22,86 @@ header {
   margin: 0 auto;
   height: 100%;
 }
+
+/* ========== ДОБАВЛЯЕМ В КОНЕЦ Header.css ========== */
+
+/* Десктопное меню - РЯДОМ С ЛОГО */
+.nav-links {
+  display: flex;
+  gap: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-link {
+  color: white !important; /* БЕЛЫЙ ЦВЕТ */
+  text-decoration: none;
+  font-size: 20px; /* БОЛЬШЕ ШРИФТ */
+  font-weight: 500;
+}
+
+/* Бургер-меню (скрыто на десктопе) */
+.burger-menu {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
+  padding: 8px;
+  position: absolute;
+  right: 20px;
+}
+
+.burger-menu span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+/* ========== ИСПРАВЛЯЕМ МОБИЛЬНОЕ МЕНЮ ========== */
+
+/* Мобильное меню (скрыто) */
+.mobile-menu {
+  display: none;
+  position: relative; /* ← МЕНЯЕМ НА RELATIVE */
+  background: #000000;
+  flex-direction: column;
+  padding: 20px;
+  gap: 15px;
+  z-index: 1000;
+}
+
+.mobile-menu a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 12px 0;
+  text-align: center;
+}
+
+/* Мобильные */
+@media (max-width: 768px) {
+  .burger-menu {
+    display: flex;
+  }
+  
+  .mobile-menu.active {
+    display: flex; /* просто показываем меню */
+  }
+  
+  .nav-links {
+    display: none !important;
+  }
+  
+
+  
+  /* УБИРАЕМ ВСЁ ЛИШНЕЕ */
+  body {
+    padding-top: 0; /* убираем отступ */
+  }
+  
+  body.menu-open {
+    overflow: visible; /* разрешаем скролл */
+  }
+}

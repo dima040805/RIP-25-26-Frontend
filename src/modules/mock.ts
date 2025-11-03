@@ -34,5 +34,16 @@ export const PLANETS_MOCK: Planet[] = [
     discovery: 2016,
     star_radius: 107000,
     is_delete: false
-  }
+  },
+    {
+    id: 4,
+    image: "HD_209458_b.png",
+    name: "TRAPPIST-3 b", 
+    description: "TRAPPIST-3 b - это землеподобная экзопланета в обитаемой зоне",
+    distance: 39,
+    mass: 0.69,
+    discovery: 2017,
+    star_radius: 208000,
+    is_delete: false
+  },
 ];
