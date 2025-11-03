@@ -7,7 +7,8 @@ import { getPlanet } from '../modules/PlanetsApi';
 import type { Planet } from '../modules/PlanetsTypes';
 import { Spinner } from 'react-bootstrap';
 import Header from '../components/Header/Header';
-import { PLANETS_MOCK } from '../modules/mock'; // ← ИМПОРТИРУЙ МОКИ
+import { PLANETS_MOCK } from '../modules/mock';
+import defaultPlanetImage from '../assets/error_planet.png'; // ← ИМПОРТИРУЙ КАРТИНКУ
 import './PlanetPage.css';
 
 export default function PlanetPage() {
@@ -15,6 +16,13 @@ export default function PlanetPage() {
   const [loading, setLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   const { id } = useParams();
+
+  const getImageUrl = (filename: string) => {
+    if (!filename || imageError) return defaultPlanetImage;
+    return `http://localhost:9000/test/${filename}`;
+  };
+
+  const [imageUrl, setImageUrl] = useState(defaultPlanetImage);
 
   useEffect(() => {
     if (!id) return;
@@ -28,14 +36,22 @@ export default function PlanetPage() {
         if (!planetData) {
           const mockPlanet = PLANETS_MOCK.find(p => p.id === Number(id)) || null;
           setPlanet(mockPlanet);
+          if (mockPlanet?.image) {
+            setImageUrl(getImageUrl(mockPlanet.image));
+          }
         } else {
           setPlanet(planetData);
+          if (planetData.image) {
+            setImageUrl(getImageUrl(planetData.image));
+          }
         }
       } catch (error) {
         console.error('Error fetching planet, using mocks:', error);
-        // При ошибке используем моки
         const mockPlanet = PLANETS_MOCK.find(p => p.id === Number(id)) || null;
         setPlanet(mockPlanet);
+        if (mockPlanet?.image) {
+          setImageUrl(getImageUrl(mockPlanet.image));
+        }
       } finally {
         setLoading(false);
       }
@@ -44,14 +60,9 @@ export default function PlanetPage() {
     fetchPlanet();
   }, [id]);
 
-
-  const getImageUrl = (filename: string) => {
-    if (!filename || imageError) return '/src/assets/error_planet.png';
-    return `http://localhost:9000/test/${filename}`;
-  };
-
   const handleImageError = () => {
     setImageError(true);
+    setImageUrl(defaultPlanetImage);
   };
 
   if (loading) {
@@ -91,9 +102,15 @@ export default function PlanetPage() {
       
       <div className="visualization">
         <img 
-          src={getImageUrl(planet.image)} 
+          src={imageError ? defaultPlanetImage : imageUrl}
           alt={planet.name}
           onError={handleImageError}
+          style={{ 
+            width: '100%', 
+            maxWidth: '600px',
+            height: 'auto', 
+            objectFit: 'contain' 
+          }}
         />
       </div>
 

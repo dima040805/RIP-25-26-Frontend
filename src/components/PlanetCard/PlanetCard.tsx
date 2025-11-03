@@ -30,7 +30,7 @@ export default function PlanetCard({ planet }: { planet: Planet }) {
 
     return (
         <div className="hds-content-item content-list-item-exoplanet">
-            <a href={`/planet/${planet.id}`} className="hds-content-item-thumbnail">
+            <Link to={`/planets/${planet.id}`} className="hds-content-item-thumbnail">
                 <img 
                     src={imageError ? defaultPlanetImage : imageUrl}
                     alt={planet.name}
@@ -42,9 +42,9 @@ export default function PlanetCard({ planet }: { planet: Planet }) {
                         background: 'black' 
                     }} 
                 />
-            </a>
+            </Link>
         <div>
-          <Link to={`/planet/${planet.id}`}className="hds-content-item-heading">
+          <Link to={`/planets/${planet.id}`}className="hds-content-item-heading">
             <div className="hds-a11y-heading-22">{planet.name}</div>
           </Link>
           <div className="CustomField">

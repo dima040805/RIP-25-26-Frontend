@@ -18,4 +18,5 @@ export default defineConfig({
     strictPort: true, // не даст использовать другой порт если 3000 занят
   },
   plugins: [react()],
+  base: "/RIP-25-26-Frontend", // Замените RepoName на имя вашего репозитория
 })
