@@ -72,5 +72,5 @@ export default defineConfig({
       }
     })
   ],
-  base: "/RIP-25-26-Frontend",
+  base: "/",
 })

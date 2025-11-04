@@ -4,6 +4,26 @@ body {
   padding: 0;
 }
 
+.root_icon{
+    background-color: #FFFFFF;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    box-shadow: 0 0 16px #0000001a;
+    position: fixed;
+    top: 90px;
+    right: 16px;
+    z-index: 100;
+    overflow: visible; 
+}
+
+.root_icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    border-radius: 50%;
+}
+
 .planets-page {
   min-height: 100vh;
 }

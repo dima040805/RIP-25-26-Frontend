@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '../store/hiiks';
 import { setPlanets, setLoading } from '../store/slices/planetSlice';
 import { setSearchName, addToHistory } from '../store/slices/searchSlice';
 import './PlanetsPage.css';
+import TelescopeImage from '../assets/Telescope.png'
 
 export default function PlanetsPage() {
   const dispatch = useAppDispatch();
@@ -78,7 +79,8 @@ export default function PlanetsPage() {
       <main>
         <div className="services-wrapper">
           <h1>Планеты</h1>
-
+            <img src = {TelescopeImage} className = "root_icon">
+            </img>
           <div className="services-search">
             <Search 
               query={searchName}
