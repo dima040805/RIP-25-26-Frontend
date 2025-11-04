@@ -1,4 +1,3 @@
-/* pages/PlanetsPage/PlanetsPage.css */
 body {
   width: 100%;
   margin: 0;
@@ -64,9 +63,7 @@ body {
   }
 }
 
-/* Добавляем в конец PlanetsPage.css */
 
-/* Мобильные стили для поиска и карточек */
 @media (max-width: 768px) {
   .services-wrapper {
     padding: 15px;
@@ -87,7 +84,7 @@ body {
     width: 100% !important;
     max-width: 100%;
     box-sizing: border-box;
-    font-size: 16px; /* Убираем zoom на iOS */
+    font-size: 16px; 
   }
   
   .services-grid {
@@ -96,14 +93,12 @@ body {
     padding: 0;
   }
   
-  /* Убедимся что ничего не выходит за экран */
   .services-wrapper h1 {
     font-size: 1.5rem;
     word-wrap: break-word;
   }
 }
 
-/* Маленькие мобильные */
 @media (max-width: 480px) {
   .services-wrapper {
     padding: 10px;

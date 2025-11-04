@@ -30,8 +30,26 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-    enabled: true,  
-  },
+        enabled: true,  
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}'],
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024, 
+        runtimeCaching: [
+          {
+            urlPattern: /\.(png|jpg|jpeg|svg|webp)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'static-images',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30, 
+              },
+            },
+          }
+        ]
+      },
+  
       manifest: {
         name: "Exoplanets",
         short_name: "Exoplanets", 
