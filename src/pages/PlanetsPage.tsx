@@ -7,8 +7,8 @@ import { BreadCrumbs } from '../components/BreadCrumbs/BreadCrumbs';
 import { ROUTE_LABELS } from '../Routes';
 import { listPlanets } from '../modules/PlanetsApi';
 import { PLANETS_MOCK } from '../modules/mock'; 
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setPlanets, setLoading } from '../store/slices/planetsSlice';
+import { useAppDispatch, useAppSelector } from '../store/hiiks';
+import { setPlanets, setLoading } from '../store/slices/planetSlice';
 import { setSearchName, addToHistory } from '../store/slices/searchSlice';
 import './PlanetsPage.css';
 
