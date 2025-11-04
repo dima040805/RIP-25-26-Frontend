@@ -2,7 +2,7 @@
 
 import type { Planet } from "./PlanetsTypes";
 
-export async function listPlanets(params?: { name?: string; date_from?: string; date_to?: string }): Promise<Planet[]> {
+export async function listPlanets(params?: { name?: string}): Promise<Planet[]> {
   try {
     let path = "/api/v1/planets";
     if (params) {

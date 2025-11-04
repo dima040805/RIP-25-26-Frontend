@@ -1,5 +1,5 @@
 // pages/PlanetsPage/PlanetsPage.tsx
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Header from '../components/Header/Header';
 import Search from '../components/Search/Search';
 import PlanetsList from '../components/PlanetsList/PlanetsList';
@@ -7,63 +7,63 @@ import { BreadCrumbs } from '../components/BreadCrumbs/BreadCrumbs';
 import { ROUTE_LABELS } from '../Routes';
 import { listPlanets } from '../modules/PlanetsApi';
 import { PLANETS_MOCK } from '../modules/mock'; 
-import type { Planet } from '../modules/PlanetsTypes';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setPlanets, setLoading } from '../store/slices/planetsSlice';
+import { setSearchName, addToHistory } from '../store/slices/searchSlice';
 import './PlanetsPage.css';
 
 export default function PlanetsPage() {
-  const [planets, setPlanets] = useState<Planet[]>([]);
-  const [searchName, setSearchName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [useMock, setUseMock] = useState(false);
+  const dispatch = useAppDispatch();
+  const { planets, loading } = useAppSelector(state => state.planets);
+  const { searchName } = useAppSelector(state => state.search);
 
-  useEffect(() => {
-    if (useMock) {
-      setPlanets(PLANETS_MOCK);
-    } else {
-      listPlanets()
-        .then((data) => {
-          if (data.length > 0) {
-            setPlanets(data);
-          } else {
-            setPlanets(PLANETS_MOCK);
-            setUseMock(true);
-          }
-        })
-        .catch(() => {
-          setPlanets(PLANETS_MOCK);
-          setUseMock(true);
-        });
-    }
-  }, [useMock]);
-
-  const handleSearch = async () => {
-    setLoading(true);
+  // Основная функция загрузки данных
+  const loadData = async (searchQuery?: string) => {
+    dispatch(setLoading(true));
+    
     try {
-      const filtered = await listPlanets({ name: searchName });
+      // Пытаемся получить данные с API
+      const apiData = await listPlanets({ name: searchQuery });
       
-      if (filtered.length > 0) {
-        setPlanets(filtered);
-        setUseMock(false);
+      if (apiData.length > 0) {
+        // Если API вернул данные - используем их
+        dispatch(setPlanets(apiData));
       } else {
-        if (useMock) {
-          const filteredMock = PLANETS_MOCK.filter(planet =>
-            planet.name.toLowerCase().includes(searchName.toLowerCase())
+        // Если API не вернул данных - используем моки
+        let filteredMock = PLANETS_MOCK;
+        if (searchQuery) {
+          filteredMock = PLANETS_MOCK.filter(planet =>
+            planet.name.toLowerCase().includes(searchQuery.toLowerCase())
           );
-          setPlanets(filteredMock);
-        } else {
-          setPlanets([]);
         }
+        dispatch(setPlanets(filteredMock));
       }
     } catch (error) {
-      const filteredMock = PLANETS_MOCK.filter(planet =>
-        planet.name.toLowerCase().includes(searchName.toLowerCase())
-      );
-      setPlanets(filteredMock);
-      setUseMock(true);
+      // Если ошибка API - используем моки
+      let filteredMock = PLANETS_MOCK;
+      if (searchQuery) {
+        filteredMock = PLANETS_MOCK.filter(planet =>
+          planet.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+      dispatch(setPlanets(filteredMock));
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
+
+  useEffect(() => {
+    loadData(searchName);
+  }, []);
+
+  const handleSearch = async () => {
+    if (searchName) {
+      dispatch(addToHistory(searchName));
+    }
+    await loadData(searchName);
+  };
+
+
 
   return (
     <div className="planets-page">
@@ -82,19 +82,19 @@ export default function PlanetsPage() {
           <div className="services-search">
             <Search 
               query={searchName}
-              onQueryChange={setSearchName}
+              onQueryChange={(value) => dispatch(setSearchName(value))}
               onSearch={handleSearch}
             />
           </div>
 
           {loading ? (
-            <div>Загрузка...</div>
+            <div style={{ textAlign: 'center', padding: '20px' }}>Загрузка...</div>
           ) : (
             <div className="services-grid">
               {planets.length > 0 ? (
                 <PlanetsList planets={planets} />
               ) : (
-                <div className="no-planets">
+                <div className="no-planets" style={{ textAlign: 'center', padding: '40px' }}>
                   {searchName 
                     ? `По запросу "${searchName}" планеты не найдены` 
                     : 'Планеты не найдены'
