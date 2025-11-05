@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:8080",
+        target: "http://172.20.10.3:8080",
         changeOrigin: true,
       },
     }, 
@@ -49,7 +49,6 @@ export default defineConfig({
           }
         ]
       },
-  
       manifest: {
         name: "Exoplanets",
         short_name: "Exoplanets", 
@@ -73,4 +72,9 @@ export default defineConfig({
     })
   ],
   base: "/",
+  // Добавьте эту настройку для продакшена
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+  },
 })
