@@ -1,0 +1,240 @@
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.root_icon{
+    background-color: #FFFFFF;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    box-shadow: 0 0 16px #0000001a;
+    position: fixed;
+    top: 90px;
+    right: 16px;
+    z-index: 100;
+    overflow: visible; 
+}
+
+.root_icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    border-radius: 50%;
+}
+
+.planets-page {
+  min-height: 100vh;
+}
+
+.services-wrapper {
+  max-width: 1352px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.services-wrapper h1 {
+  font-family: "inter", sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #000;
+}
+
+.services-search {
+  margin-bottom: 32px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(429px, 1fr));
+  gap: 32px;
+  row-gap: 20px;
+}
+
+/* Адаптивность */
+@media (max-width: 1400px) {
+  .services-wrapper {
+    max-width: 100%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .services-search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .services-wrapper {
+    padding: 15px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .services-search {
+    margin-bottom: 20px;
+  }
+  
+  .services-search-form {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .search-input {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 16px; 
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 0;
+  }
+  
+  .services-wrapper h1 {
+    font-size: 1.5rem;
+    word-wrap: break-word;
+  }
+}
+
+@media (max-width: 480px) {
+  .services-wrapper {
+    padding: 10px;
+  }
+  
+  .services-grid {
+    gap: 10px;
+  }
+  
+  .search-input {
+    padding: 12px;
+    font-size: 16px;
+  }
+}
+
+/* ВОССТАНАВЛИВАЕМ СТИЛИ ДЛЯ ФОРМЫ ПОИСКА */
+/* Специфичные стили для формы поиска */
+.services-search > form {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  height: auto !important;
+}
+
+.services-search .search-input {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Стили для телескопа на PlanetsPage */
+.research-telescope {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  text-decoration: none;
+}
+
+.research-telescope.active {
+  background: #0B3D91;
+  transform: scale(1.1);
+}
+
+.research-telescope.active:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(11, 61, 145, 0.3);
+}
+
+.research-telescope.inactive {
+  background: #CCCCCC;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.research-telescope.inactive:hover {
+  transform: scale(1.05);
+}
+
+.telescope-icon {
+  width: 50px;
+  height: 50px;
+  filter: brightness(0) invert(1);
+}
+
+.research-telescope.inactive .telescope-icon {
+  filter: brightness(0) invert(0.5);
+}
+
+.telescope-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #FC3D21;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Адаптивность для телескопа */
+@media (max-width: 768px) {
+  .research-telescope {
+    width: 60px;
+    height: 60px;
+    bottom: 15px;
+    right: 15px;
+  }
+  
+  .telescope-icon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .telescope-badge {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+}

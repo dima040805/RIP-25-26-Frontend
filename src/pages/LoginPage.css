@@ -1,0 +1,151 @@
+.login-page {
+  min-height: 100vh;
+  background: white;
+  padding-top: 0px;
+}
+
+.login-container {
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Изменил на flex-start */
+  min-height:77px;
+}
+
+.login-form-wrapper {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px; /* Увеличил ширину */
+  min-height: 600px; /* Увеличил высоту */
+  box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 2px solid #0B3D91;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form-wrapper h1 {
+  color: #0B3D91;
+  text-align: center;
+  margin-bottom: 40px; /* Увеличил отступ */
+  font-size: 28px; /* Увеличил шрифт */
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex-grow: 1; /* Занимает всё доступное пространство */
+}
+
+.form-group {
+  margin-bottom: 30px; /* Увеличил отступ */
+  width: 100%;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 12px; /* Увеличил отступ */
+  color: #333;
+  font-weight: 500;
+  font-size: 16px; /* Увеличил шрифт */
+}
+
+.form-group input {
+  width: 100%;
+  padding: 15px; /* Увеличил паддинги */
+  border: 2px solid #ccc; /* Увеличил бордер */
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+  display: block;
+}
+
+.login-button {
+  width: 100%;
+  background: #0B3D91;
+  color: white;
+  border: none;
+  padding: 16px; /* Увеличил паддинги */
+  border-radius: 8px;
+  font-size: 18px; /* Увеличил шрифт */
+  cursor: pointer;
+  margin-top: 20px; /* Увеличил отступ */
+  box-sizing: border-box;
+  display: block;
+}
+
+.login-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #ffe6e6;
+  color: #d63031;
+  padding: 15px; /* Увеличил паддинги */
+  border-radius: 8px;
+  margin-bottom: 30px; /* Увеличил отступ */
+  text-align: center;
+  display: block;
+  font-size: 16px; /* Увеличил шрифт */
+}
+
+.login-links {
+  text-align: center;
+  margin-top: 40px; /* Увеличил отступ */
+  display: block;
+  font-size: 16px; /* Увеличил шрифт */
+}
+
+.login-links a {
+  color: #0B3D91;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 20px 15px;
+  }
+  
+  .login-form-wrapper {
+    padding: 30px 20px;
+    margin: 0 10px;
+    max-width: 100%;
+    min-height: 500px;
+  }
+}
+
+/* ЖЕСТКО ПЕРЕБИВАЕМ ГЛОБАЛЬНЫЕ СТИЛИ */
+form {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  gap: 0 !important;
+  height: auto !important;
+}
+
+form.login-form {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.login-page {
+  min-height: 100vh;
+  background: white;
+}
+
+.login-container {
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 77px);
+  margin-top: 77px; /* Добавь эту строку */
+}
