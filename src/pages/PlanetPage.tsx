@@ -19,7 +19,7 @@ export default function PlanetPage() {
 
   const getImageUrl = (filename: string) => {
     if (!filename || imageError) return defaultPlanetImage;
-    return `http://192.168.1.76:9000/test/${filename}`;
+    return `http://localhost:9000/test/${filename}`;
   };
 
   const [imageUrl, setImageUrl] = useState(defaultPlanetImage);
