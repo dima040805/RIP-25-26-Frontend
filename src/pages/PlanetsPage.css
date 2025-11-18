@@ -113,3 +113,89 @@ body {
     font-size: 16px;
   }
 }
+
+/* Стили для телескопа на PlanetsPage */
+.research-telescope {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  text-decoration: none;
+}
+
+.research-telescope.active {
+  background: #0B3D91;
+  transform: scale(1.1);
+}
+
+.research-telescope.active:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(11, 61, 145, 0.3);
+}
+
+.research-telescope.inactive {
+  background: #CCCCCC;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.research-telescope.inactive:hover {
+  transform: scale(1.05);
+}
+
+.telescope-icon {
+  width: 50px;
+  height: 50px;
+  filter: brightness(0) invert(1);
+}
+
+.research-telescope.inactive .telescope-icon {
+  filter: brightness(0) invert(0.5);
+}
+
+.telescope-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #FC3D21;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Адаптивность для телескопа */
+@media (max-width: 768px) {
+  .research-telescope {
+    width: 60px;
+    height: 60px;
+    bottom: 15px;
+    right: 15px;
+  }
+  
+  .telescope-icon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .telescope-badge {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+}

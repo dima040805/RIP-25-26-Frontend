@@ -1,21 +1,33 @@
 // pages/PlanetsPage/PlanetsPage.tsx
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../components/Header/Header';
 import Search from '../components/Search/Search';
 import PlanetsList from '../components/PlanetsList/PlanetsList';
 import { BreadCrumbs } from '../components/BreadCrumbs/BreadCrumbs';
 import { ROUTE_LABELS } from '../Routes';
-import { listPlanets } from '../modules/PlanetsApi';
+import { listPlanets, getResearchCart } from '../modules/PlanetsApi';
 import { PLANETS_MOCK } from '../modules/mock'; 
 import { useAppDispatch, useAppSelector } from '../store/hiiks';
 import { setPlanets, setLoading } from '../store/slices/planetSlice';
 import { setSearchName, addToHistory } from '../store/slices/searchSlice';
 import './PlanetsPage.css';
+import TelescopeImage from '../assets/Telescope.png'
+import { Link } from 'react-router-dom';
 
 export default function PlanetsPage() {
   const dispatch = useAppDispatch();
   const { planets, loading } = useAppSelector(state => state.planets);
   const { searchName } = useAppSelector(state => state.search);
+  const [researchCart, setResearchCart] = useState<{id: number, planets_count: number} | null>(null);
+
+  // Загружаем корзину при монтировании
+  useEffect(() => {
+    const loadResearchCart = async () => {
+      const cart = await getResearchCart();
+      setResearchCart(cart);
+    };
+    loadResearchCart();
+  }, []);
 
   // Основная функция загрузки данных
   const loadData = async (searchQuery?: string) => {
@@ -63,7 +75,8 @@ export default function PlanetsPage() {
     await loadData(searchName);
   };
 
-
+  // Проверяем активна ли корзина (id существует и planets_count > 0)
+  const isCartActive = researchCart?.id && researchCart.planets_count > 0;
 
   return (
     <div className="planets-page">
@@ -78,6 +91,25 @@ export default function PlanetsPage() {
       <main>
         <div className="services-wrapper">
           <h1>Планеты</h1>
+          
+          {/* Телескоп - активный если есть исследование с планетами, неактивный если нет */}
+          <div className="research-telescope-container">
+            <Link 
+              to={isCartActive ? `/research/${researchCart.id}` : '#'} 
+              className={`research-telescope ${isCartActive ? 'active' : 'inactive'}`}
+              onClick={(e) => {
+                if (!isCartActive) {
+                  e.preventDefault();
+                  alert('У вас нет активного исследования с планетами');
+                }
+              }}
+            >
+              <img src={TelescopeImage} alt="Исследования" className="telescope-icon" />
+              {researchCart?.planets_count && researchCart.planets_count > 0 && (
+                <span className="telescope-badge">{researchCart.planets_count}</span>
+              )}
+            </Link>
+          </div>
 
           <div className="services-search">
             <Search 

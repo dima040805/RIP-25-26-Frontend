@@ -15,6 +15,7 @@
   object-fit: cover;
   object-position: 77% 48%;
   z-index: 1;
+  transition: opacity 1s ease-in-out;
 }
 
 .banner-overlay {
@@ -32,16 +33,79 @@
   z-index: 3;
   color: white;
   padding: 2rem;
-  max-width: 600px;
+  max-width: 800px;
 }
 
 .banner-content h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
-.banner-content p {
-  font-size: 1.125rem;
-  margin-bottom: 1.5rem;
+.banner-description {
+  font-size: 1.5rem;
+  margin-bottom: 0;
   line-height: 1.6;
+  font-weight: 300;
+}
+
+/* Индикаторы карусели */
+.carousel-indicators {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 4;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+.carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .banner-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .banner-description {
+    font-size: 1.25rem;
+  }
+  
+  .banner-content {
+    max-width: 90%;
+    padding: 1rem;
+  }
+  
+  .carousel-indicators {
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-content h1 {
+    font-size: 2rem;
+  }
+  
+  .banner-description {
+    font-size: 1.125rem;
+  }
 }

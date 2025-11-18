@@ -64,3 +64,21 @@ export async function getPlanet(id: number): Promise<Planet | null> {
     return null;
   }
 }
+
+export async function getResearchCart(): Promise<{id: number, planets_count: number} | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/research/research-cart`, { 
+      mode: 'cors',
+      headers: { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      } 
+    });
+    
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.log('❌ API error getting research cart');
+    return null;
+  }
+}

@@ -11,7 +11,7 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:8080",
         changeOrigin: true,
-        secure: false, // ← ДОБАВЬ ДЛЯ HTTPS ПРОКСИ
+        secure: false, 
       },
     }, 
     port: 3000,
@@ -24,7 +24,7 @@ export default defineConfig({
       key: fs.readFileSync(path.resolve(__dirname, 'public/cert.key')),
       cert: fs.readFileSync(path.resolve(__dirname, 'public/cert.crt')),
     },
-    cors: { // ← ДОБАВЬ CORS НАСТРОЙКИ
+    cors: { 
       origin: [
         'https://dima040805.github.io',
         'https://172.20.10.3:3000',
