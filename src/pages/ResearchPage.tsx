@@ -21,29 +21,15 @@ export default function ResearchPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   
-  const { researchDetail, loading, saveLoading, error } = useAppSelector(state => state.research);
+  const { researchDetail, loading } = useAppSelector(state => state.research);
   const { isAuthenticated } = useAppSelector(state => state.user);
   
   const [observationDate, setObservationDate] = useState('');
   const [planetShines, setPlanetShines] = useState<{ [key: number]: number }>({});
   const [imageErrors, setImageErrors] = useState<{ [key: number]: boolean }>({});
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
 
   const researchId = id ? parseInt(id, 10) : null;
-
-  const getStatusText = (status: string | undefined) => {
-    if (!status) return 'Неизвестно';
-    
-    const statusMap: { [key: string]: string } = {
-      'draft': 'Черновик',
-      'formed': 'Сформирована', 
-      'completed': 'Завершена',
-      'rejected': 'Отклонена',
-    };
-    
-    return statusMap[status] || status;
-  };
 
   const isDraft = () => {
     const status = researchDetail?.research?.status || researchDetail?.status;
@@ -138,12 +124,8 @@ export default function ResearchPage() {
         researchId,
         date: observationDate
       })).unwrap();
-      
-      setSuccessMessage('Дата успешно сохранена!');
-      setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (error: any) {
-      setSuccessMessage('Ошибка сохранения даты');
-      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      // Просто игнорируем ошибки
     }
   };
 
@@ -159,12 +141,8 @@ export default function ResearchPage() {
         researchId,
         shine: shineValue
       })).unwrap();
-      
-      setSuccessMessage('Данные планеты успешно сохранены!');
-      setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (error: any) {
-      setSuccessMessage('Ошибка сохранения данных планеты');
-      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      // Просто игнорируем ошибки
     }
   };
 
@@ -177,29 +155,21 @@ export default function ResearchPage() {
         researchId
       })).unwrap();
       
+      // Перезагружаем данные после удаления
       dispatch(getResearchDetail(researchId));
-      
-      setSuccessMessage('Планета удалена из исследования!');
-      setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (error: any) {
-      setSuccessMessage('Ошибка удаления планеты');
-      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      // Просто игнорируем ошибки
     }
   };
 
   const handleDeleteResearch = async () => {
     if (!researchId || !isDraft()) return;
     
-    if (!window.confirm('Вы уверены, что хотите удалить это исследование?')) {
-      return;
-    }
-    
     try {
       await dispatch(deleteResearch(researchId)).unwrap();
       navigate('/planets');
     } catch (error) {
-      setSuccessMessage('Ошибка удаления исследования');
-      setTimeout(() => setSuccessMessage(''), 3000);
+      // Просто игнорируем ошибки
     }
   };
 
@@ -207,19 +177,15 @@ export default function ResearchPage() {
     if (!researchId || !isDraft()) return;
     
     setSubmitLoading(true);
-    setSuccessMessage('');
     
     try {
       await dispatch(formResearch(researchId)).unwrap();
       
-      setSuccessMessage('Исследование успешно подтверждено!');
+      // Перезагружаем данные после подтверждения
+      dispatch(getResearchDetail(researchId));
       
-      setTimeout(() => {
-        dispatch(getResearchDetail(researchId));
-      }, 1000);
-      
-    } catch (error: any) {
-      setSuccessMessage('Ошибка при подтверждении исследования');
+    } catch (error) {
+      // Просто игнорируем ошибки
     } finally {
       setSubmitLoading(false);
     }
@@ -230,17 +196,6 @@ export default function ResearchPage() {
       <div className="research-page">
         <Header />
         <div className="loading">Загрузка исследования...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="research-page">
-        <Header />
-        <div className="error-message">
-          Ошибка загрузки исследования: {error}
-        </div>
       </div>
     );
   }
@@ -282,18 +237,8 @@ export default function ResearchPage() {
         <div className="research-header">
           <h1>Планеты для исследования #{researchDisplayId}</h1>
           <p>Всего планет: {planets.length}</p>
-          <p>Статус: <strong>{getStatusText(currentStatus)}</strong></p>
-          <p>Создатель: {researchData?.creator_login || 'Неизвестно'}</p>
-          {researchData?.moderator_login && (
-            <p>Модератор: {researchData.moderator_login}</p>
-          )}
+          <p>Статус: <strong>{currentStatus}</strong></p>
         </div>
-
-        {successMessage && (
-          <div className={`success-message ${successMessage.includes('Ошибка') ? 'error' : 'success'}`}>
-            {successMessage}
-          </div>
-        )}
 
         <div className="date-section">
           <div className="date-input-container">
@@ -309,9 +254,9 @@ export default function ResearchPage() {
               <button 
                 className="btn-save-date"
                 onClick={handleSaveDate}
-                disabled={saveLoading.date || !observationDate}
+                disabled={!observationDate}
               >
-                {saveLoading.date ? 'Сохранение...' : 'Сохранить дату'}
+                Сохранить дату
               </button>
             )}
           </div>
@@ -370,9 +315,9 @@ export default function ResearchPage() {
                         <button 
                           className="btn-save-shine"
                           onClick={() => handleSavePlanetShine(planet.id)}
-                          disabled={saveLoading.planets[planet.id] || shineValue === 0}
+                          disabled={shineValue === 0}
                         >
-                          {saveLoading.planets[planet.id] ? '...' : 'Сохранить'}
+                          Сохранить
                         </button>
                       </div>
                     ) : (

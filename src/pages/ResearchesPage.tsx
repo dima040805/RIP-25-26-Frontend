@@ -10,11 +10,10 @@ import './ResearchesPage.css';
 export default function ResearchesPage() {
   const navigate = useNavigate();
   
-  const { isAuthenticated, username } = useAppSelector(state => state.user);
+  const { isAuthenticated } = useAppSelector(state => state.user);
   const [researches, setResearches] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -30,14 +29,8 @@ export default function ResearchesPage() {
     
     try {
       const response = await api.researches.researchesList();
-      
-      // Бэкенд уже возвращает только исследования текущего пользователя
-      // Убираем черновики, так как они отображаются в корзине
-      const researchesWithoutDrafts = response.data.filter((research: any) => 
-        research.status !== 'draft'
-      );
-      
-      setResearches(researchesWithoutDrafts);
+      // Просто показываем все заявки без фильтрации
+      setResearches(response.data);
     } catch (error: any) {
       setError(error.response?.data?.description || 'Ошибка загрузки исследований');
     } finally {
@@ -65,10 +58,6 @@ export default function ResearchesPage() {
     return classMap[status] || '';
   };
 
-  const filteredResearches = statusFilter === 'all' 
-    ? researches 
-    : researches.filter(research => research.status === statusFilter);
-
   const handleResearchClick = (researchId: number) => {
     navigate(`/research/${researchId}`);
   };
@@ -93,10 +82,9 @@ export default function ResearchesPage() {
       />
       
       <main>
-        <div className="researches-header">
+        <div className="research-header">
           <h1>Мои исследования</h1>
           <p>Всего исследований: {researches.length}</p>
-          <p>Пользователь: {username}</p>
         </div>
 
         {error && (
@@ -105,83 +93,58 @@ export default function ResearchesPage() {
           </div>
         )}
 
-        {/* Фильтры по статусу */}
-        <div className="filters-section">
-          <div className="status-filters">
-            <button 
-              className={`filter-btn ${statusFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setStatusFilter('all')}
-            >
-              Все
-            </button>
-            <button 
-              className={`filter-btn ${statusFilter === 'formed' ? 'active' : ''}`}
-              onClick={() => setStatusFilter('formed')}
-            >
-              Сформированы
-            </button>
-            <button 
-              className={`filter-btn ${statusFilter === 'completed' ? 'active' : ''}`}
-              onClick={() => setStatusFilter('completed')}
-            >
-              Завершены
-            </button>
-            <button 
-              className={`filter-btn ${statusFilter === 'rejected' ? 'active' : ''}`}
-              onClick={() => setStatusFilter('rejected')}
-            >
-              Отклонены
-            </button>
-          </div>
-        </div>
-
         <div className="researches-table-container">
-          {filteredResearches.length > 0 ? (
-            <table className="researches-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Статус</th>
-                  <th>Дата создания</th>
-                  <th>Дата исследования</th>
-                  <th>Дата формирования</th>
-                  <th>Дата завершения</th>
-                  <th>Модератор</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredResearches.map((research) => (
-                  <tr 
+          {researches.length > 0 ? (
+            <div className="research-table-wrapper">
+              {/* Заголовок таблицы */}
+              <div className="research-table-header">
+                <span className="research-id-header">ID</span>
+                <span className="status-header">Статус</span>
+                <span className="creator-header">Создатель</span>
+                <span className="date-create-header">Дата создания</span>
+                <span className="date-research-header">Дата исследования</span>
+                <span className="date-form-header">Дата формирования</span>
+                <span className="date-finish-header">Дата завершения</span>
+                <span className="moderator-header">Модератор</span>
+              </div>
+
+              {/* Тело таблицы */}
+              <div className="research-table-body">
+                {researches.map((research) => (
+                  <div 
                     key={research.id}
-                    className="research-row"
+                    className="research-table-row"
                     onClick={() => handleResearchClick(research.id)}
                   >
-                    <td className="research-id">#{research.id}</td>
-                    <td>
-                      <span className={`status-badge ${getStatusClass(research.status)}`}>
-                        {getStatusText(research.status)}
-                      </span>
-                    </td>
-                    <td>{new Date(research.date_create).toLocaleDateString('ru-RU')}</td>
-                    <td>{research.date_research ? new Date(research.date_research).toLocaleDateString('ru-RU') : '—'}</td>
-                    <td>{research.date_form ? new Date(research.date_form).toLocaleDateString('ru-RU') : '—'}</td>
-                    <td>{research.date_finish ? new Date(research.date_finish).toLocaleDateString('ru-RU') : '—'}</td>
-                    <td>{research.moderator_login || '—'}</td>
-                  </tr>
+                    <span className="research-id">#{research.id}</span>
+                    <span className={`status-badge ${getStatusClass(research.status)}`}>
+                      {getStatusText(research.status)}
+                    </span>
+                    <span className="creator">
+                      {research.creator_login || '—'}
+                    </span>
+                    <span className="date-create">
+                      {new Date(research.date_create).toLocaleDateString('ru-RU')}
+                    </span>
+                    <span className="date-research">
+                      {research.date_research ? new Date(research.date_research).toLocaleDateString('ru-RU') : '—'}
+                    </span>
+                    <span className="date-form">
+                      {research.date_form ? new Date(research.date_form).toLocaleDateString('ru-RU') : '—'}
+                    </span>
+                    <span className="date-finish">
+                      {research.date_finish ? new Date(research.date_finish).toLocaleDateString('ru-RU') : '—'}
+                    </span>
+                    <span className="moderator">
+                      {research.moderator_login || '—'}
+                    </span>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </div>
           ) : (
             <div className="empty-researches">
               <p>Исследования не найдены</p>
-              {statusFilter !== 'all' && (
-                <button 
-                  className="btn-clear-filter"
-                  onClick={() => setStatusFilter('all')}
-                >
-                  Показать все исследования
-                </button>
-              )}
             </div>
           )}
         </div>

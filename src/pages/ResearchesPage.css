@@ -1,199 +1,207 @@
-/* src/pages/ResearchesPage.css */
 .researches-page {
   min-height: 100vh;
   background: white;
 }
 
-.researches-header {
+.researches-page main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.research-header {
   text-align: center;
   font-size: 2.5rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-weight: 500;
   margin-bottom: 30px;
+  padding-top: 48px;
 }
 
-.researches-header h1 {
+.research-header h1 {
   margin-bottom: 10px;
   color: #000;
 }
 
-.researches-header p {
+.research-header p {
   font-size: 1.2rem;
   color: #666;
 }
 
-.filters-section {
-  margin-bottom: 30px;
-  display: flex;
-  justify-content: center;
-}
-
-.status-filters {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  background: #000000;
-  border: 2px solid #2491ff;
-  border-radius: 6px;
-  color: #FFFFFF;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: "DM Mono", monospace;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.filter-btn:hover {
-  background-color: #2491ff;
-}
-
-.filter-btn.active {
-  background-color: #2491ff;
-  color: white;
-}
-
-.researches-table-container {
-  width: 95%;
-  max-width: 1400px;
-  margin: 0 auto;
-  overflow-x: auto;
-}
-
-.researches-table {
+/* Таблица исследований */
+.research-table-wrapper {
   width: 100%;
-  border-collapse: collapse;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  overflow: hidden;
+  margin: 0 auto;
 }
 
-.researches-table th {
-  background: #000;
+.research-table-header {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  background-color: #000;
   color: white;
-  padding: 15px;
-  text-align: left;
-  font-weight: 600;
+  font-weight: 700;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  padding: 0 20px;
+  border-radius: 6px 6px 0 0;
 }
 
-.researches-table td {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+.research-table-body {
+  border: 1px solid #e0e0e0;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
 }
 
-.research-row {
+.research-table-row {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 0 20px;
+  border-bottom: 1px solid #e0e0e0;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
 }
 
-.research-row:hover {
+.research-table-row:hover {
   background-color: #f8f9fa;
 }
 
-.research-id {
-  font-weight: 600;
-  color: #000;
+.research-table-row:last-child {
+  border-bottom: none;
 }
 
+/* Колонки таблицы */
+.research-id-header,
+.status-header,
+.creator-header,
+.date-create-header,
+.date-research-header,
+.date-form-header,
+.date-finish-header,
+.moderator-header {
+  flex: 1;
+  text-align: center;
+}
+
+.research-id,
+.status-badge,
+.creator,
+.date-create,
+.date-research,
+.date-form,
+.date-finish,
+.moderator {
+  flex: 1;
+  text-align: center;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Бейджи статусов */
 .status-badge {
   padding: 6px 12px;
   border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-block;
 }
 
 .status-draft {
-  background: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeaa7;
+  background-color: #ffd8d8;
+  color: #d63031;
 }
 
 .status-formed {
-  background: #d1ecf1;
-  color: #0c5460;
-  border: 1px solid #bee5eb;
+  background-color: #d8f5ff;
+  color: #0984e3;
 }
 
 .status-completed {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background-color: #d8ffde;
+  color: #00b894;
 }
 
-.status-moderation {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+.status-rejected {
+  background-color: #ffeaa7;
+  color: #e17055;
+}
+
+/* Сообщения */
+.error-message {
+  background: #ffe6e6;
+  border: 1px solid #ffcccc;
+  color: #d63031;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto 20px;
 }
 
 .empty-researches {
   text-align: center;
-  padding: 60px 20px;
+  padding: 50px;
+  color: #666;
+  font-size: 1.2rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 50px 20px;
+  font-size: 1.2rem;
   color: #666;
 }
 
-.empty-researches p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-}
-
-.btn-clear-filter {
-  background: #000000;
-  border: 2px solid #2491ff;
-  border-radius: 6px;
-  color: #FFFFFF;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: "DM Mono", monospace;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-clear-filter:hover {
-  background-color: #2491ff;
-}
-
-.loading, .error-message {
-  text-align: center;
-  padding: 50px;
-  font-size: 1.2rem;
-}
-
-.error-message {
-  color: #d63031;
-  background: #ffeaa7;
-  padding: 15px;
-  border-radius: 8px;
-  margin: 20px auto;
-  width: 80%;
-  max-width: 500px;
-}
-
 /* Адаптивность */
+@media (max-width: 1200px) {
+  .researches-page main {
+    max-width: 95%;
+  }
+  
+  .research-table-header,
+  .research-table-row {
+    padding: 0 15px;
+  }
+}
+
 @media (max-width: 768px) {
-  .researches-table {
-    font-size: 14px;
+  .research-header h1 {
+    font-size: 2rem;
   }
   
-  .researches-table th,
-  .researches-table td {
-    padding: 10px 8px;
+  .research-table-header {
+    display: none;
   }
   
-  .status-filters {
-    justify-content: center;
+  .research-table-row {
+    flex-direction: column;
+    height: auto;
+    padding: 15px;
+    gap: 10px;
+    align-items: flex-start;
   }
   
-  .filter-btn {
-    padding: 8px 16px;
-    font-size: 12px;
+  .research-id,
+  .status-badge,
+  .creator,
+  .date-create,
+  .date-research,
+  .date-form,
+  .date-finish,
+  .moderator {
+    flex: none;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
   }
+  
+  .research-id::before { content: "ID: "; font-weight: 600; }
+  .status-badge::before { content: "Статус: "; font-weight: 600; }
+  .creator::before { content: "Создатель: "; font-weight: 600; }
+  .date-create::before { content: "Дата создания: "; font-weight: 600; }
+  .date-research::before { content: "Дата исследования: "; font-weight: 600; }
+  .date-form::before { content: "Дата формирования: "; font-weight: 600; }
+  .date-finish::before { content: "Дата завершения: "; font-weight: 600; }
+  .moderator::before { content: "Модератор: "; font-weight: 600; }
 }
