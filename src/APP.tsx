@@ -10,6 +10,8 @@ import RegistrationPage from './pages/RegistrationPage';
 import ResearchPage from './pages/ResearchPage';
 import ResearchesPage from './pages/ResearchesPage';
 import ProfilePage from './pages/ProfilePage'; 
+import ModeratorDashboard from './pages/ModeratorDashboard'; 
+
 
 function App() {
   return (
@@ -23,6 +25,7 @@ function App() {
         <Route path="/research/:id" element={<ResearchPage />} />
         <Route path="/researches" element={<ResearchesPage />} />
         <Route path="/profile" element={<ProfilePage />} /> 
+        <Route path="/moderator" element={<ModeratorDashboard />} />
       </Routes>
     </BrowserRouter>
   );

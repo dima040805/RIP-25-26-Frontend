@@ -1,0 +1,315 @@
+.moderator-dashboard {
+  min-height: 100vh;
+  background: white;
+}
+
+.moderator-header {
+  text-align: center;
+  padding: 40px 20px 20px;
+  margin-bottom: 30px;
+}
+
+.moderator-header h1 {
+  font-family: "Inter", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.moderator-header p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.polling-indicator {
+  background: #e3f2fd;
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #1976d2;
+  font-family: "DM Mono", monospace;
+}
+
+.moderator-filters {
+  display: flex;
+  gap: 20px;
+  align-items: end;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  padding: 0 20px;
+  justify-content: center;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 8px 12px;
+  border: 0.842px solid #F0F0F0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+  height: 40px;
+  min-width: 150px;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+  outline: .25rem solid #2491ff;
+  outline-offset: 0;
+}
+
+.btn-refresh {
+  background: #000000;
+  border: 2px solid #2491ff;
+  border-radius: 6px;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "DM Mono", monospace;
+  cursor: pointer;
+  min-height: 48px;
+  transition: background-color 0.3s;
+}
+
+.btn-refresh:hover {
+  background-color: #2491ff;
+}
+
+.moderator-table {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+  font-family: "Inter", sans-serif;
+}
+
+.moderator-table th {
+  background: #000;
+  color: white;
+  padding: 16px 12px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+}
+
+.moderator-table td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+}
+
+.research-id {
+  font-weight: 600;
+  color: #0B3D91;
+  font-family: "DM Mono", monospace;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-formed {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.status-completed {
+  background: #d1edff;
+  color: #0c5460;
+  border: 1px solid #b8daff;
+}
+
+.status-rejected {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.actions-cell button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: "DM Mono", monospace;
+  transition: all 0.3s ease;
+  min-height: 36px;
+  white-space: nowrap;
+}
+
+.btn-approve {
+  background: #000000;
+  border: 2px solid #28a745 !important;
+  color: #FFFFFF;
+}
+
+.btn-approve:hover {
+  background-color: #28a745;
+}
+
+.btn-reject {
+  background: #000000;
+  border: 2px solid #F64137 !important;
+  color: #FFFFFF;
+}
+
+.btn-reject:hover {
+  background-color: #F64137;
+}
+
+.btn-calculate {
+  background: #000000;
+  border: 2px solid #ffc107 !important;
+  color: #FFFFFF;
+}
+
+.btn-calculate:hover {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.btn-view {
+  background: #000000;
+  border: 2px solid #6c757d !important;
+  color: #FFFFFF;
+}
+
+.btn-view:hover {
+  background-color: #6c757d;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  font-size: 1.2rem;
+  font-family: "Inter", sans-serif;
+}
+
+.empty-researches {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  font-size: 1.2rem;
+  font-family: "Inter", sans-serif;
+}
+
+.error-message {
+  background: #ffeaa7;
+  color: #d63031;
+  padding: 15px 20px;
+  border-radius: 6px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+  .moderator-filters {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .moderator-header h1 {
+    font-size: 2rem;
+  }
+  
+  .moderator-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .filter-group select,
+  .filter-group input {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .moderator-table {
+    font-size: 12px;
+  }
+  
+  .moderator-table th,
+  .moderator-table td {
+    padding: 12px 8px;
+  }
+  
+  .actions-cell {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .actions-cell button {
+    width: 100%;
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .moderator-header {
+    padding: 30px 15px 15px;
+  }
+  
+  .moderator-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .moderator-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+/* Стили для контентных секций как в ResearchPage */
+.content-list-section {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border: 0.842px solid #F0F0F0;
+  outline: none;
+  padding-left: 8px;
+  font-family: Public Sans Web, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-size: 14.4px;
+}
+
+.content-list-section:focus {
+  outline: .25rem solid #2491ff;
+  outline-offset: 0;
+}
