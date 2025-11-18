@@ -109,109 +109,109 @@ export default function ProfilePage() {
     );
   }
 
-  return (
-    <div className="profile-page">
-      <Header />
-      
-      <BreadCrumbs
-        crumbs={[
-          { label: ROUTE_LABELS.PROFILE },
-        ]}
-      />
-      
-      <main>
-        <div className="profile-header">
-          <h1>Личный кабинет</h1>
-          <p>Управление вашим профилем</p>
+return (
+  <div className="profile-page">
+    <Header />
+    
+    <BreadCrumbs
+      crumbs={[
+        { label: ROUTE_LABELS.PROFILE },
+      ]}
+    />
+    
+    <main>
+      <div className="profile-header">
+        <h1>Личный кабинет</h1>
+        <p>Управление вашим профилем</p>
+      </div>
+
+      {error && (
+        <div className="error-message">
+          {error}
         </div>
+      )}
 
-        {error && (
-          <div className="error-message">
-            {error}
-          </div>
-        )}
+      {successMessage && (
+        <div className="success-message">
+          {successMessage}
+        </div>
+      )}
 
-        {successMessage && (
-          <div className="success-message">
-            {successMessage}
-          </div>
-        )}
-
-        <div className="profile-content">
-          {/* Информация о пользователе */}
-          <div className="profile-section">
-            <h2>Информация о профиле</h2>
-            <div className="profile-info">
-              <div className="info-item">
-                <label>Логин:</label>
-                <span>{profile?.login || username}</span>
-              </div>
-              <div className="info-item">
-                <label>ID:</label>
-                <span>{profile?.id || '—'}</span>
-              </div>
-              <div className="info-item">
-                <label>Роль:</label>
-                <span>{profile?.is_moderator ? 'Модератор' : 'Пользователь'}</span>
-              </div>
+      <div className="profile-content">
+        {/* Информация о пользователе */}
+        <div className="profile-section">
+          <h2>Информация о профиле</h2>
+          <div className="profile-info">
+            <div className="info-item">
+              <label>Логин:</label>
+              <span>{profile?.login || username}</span>
+            </div>
+            <div className="info-item">
+              <label>ID:</label>
+              <span>{profile?.id || '—'}</span>
+            </div>
+            <div className="info-item">
+              <label>Роль:</label>
+              <span>{profile?.is_moderator ? 'Модератор' : 'Пользователь'}</span>
             </div>
           </div>
-
-          {/* Смена пароля */}
-          <div className="profile-section">
-            <h2>Смена пароля</h2>
-            <form onSubmit={handleChangePassword} className="password-form">
-              <div className="form-group">
-                <label htmlFor="currentPassword">Текущий пароль</label>
-                <input
-                  type="password"
-                  id="currentPassword"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  placeholder="Введите текущий пароль"
-                  required
-                  disabled={changingPassword}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="newPassword">Новый пароль</label>
-                <input
-                  type="password"
-                  id="newPassword"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Введите новый пароль (мин. 6 символов)"
-                  required
-                  minLength={6}
-                  disabled={changingPassword}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Подтвердите новый пароль</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Повторите новый пароль"
-                  required
-                  disabled={changingPassword}
-                />
-              </div>
-
-              <button 
-                type="submit" 
-                className="btn-change-password"
-                disabled={changingPassword}
-              >
-                {changingPassword ? 'Смена пароля...' : 'Сменить пароль'}
-              </button>
-            </form>
-          </div>
         </div>
-      </main>
-    </div>
-  );
+
+        {/* Смена пароля */}
+        <div className="profile-section">
+          <h2>Смена пароля</h2>
+          <form onSubmit={handleChangePassword} className="password-form">
+            <div className="form-group">
+              <label htmlFor="currentPassword">Текущий пароль</label>
+              <input
+                type="password"
+                id="currentPassword"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="Введите текущий пароль"
+                required
+                disabled={changingPassword}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="newPassword">Новый пароль</label>
+              <input
+                type="password"
+                id="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Введите новый пароль (мин. 6 символов)"
+                required
+                minLength={6}
+                disabled={changingPassword}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Подтвердите новый пароль</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Повторите новый пароль"
+                required
+                disabled={changingPassword}
+              />
+            </div>
+
+            <button 
+              type="submit" 
+              className="btn-change-password"
+              disabled={changingPassword}
+            >
+              {changingPassword ? 'Смена пароля...' : 'Сменить пароль'}
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+);
 }

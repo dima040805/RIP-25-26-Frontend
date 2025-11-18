@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import type { Planet } from "../../modules/PlanetsTypes";
 import type { AppDispatch, RootState } from '../../store';
 import { addToResearch } from '../../store/slices/researchSlice';
@@ -10,6 +11,7 @@ import defaultPlanetImage from '../../assets/error_planet.png';
 
 export default function PlanetCard({ planet }: { planet: Planet }) {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
     const { isAuthenticated } = useSelector((state: RootState) => state.user);
     const { loading } = useSelector((state: RootState) => state.research);
     
@@ -39,6 +41,8 @@ export default function PlanetCard({ planet }: { planet: Planet }) {
 
     const handleAddToResearch = async () => {
         if (!isAuthenticated) {
+            // Редирект на страницу входа если не авторизован
+            navigate('/login');
             return;
         }
 

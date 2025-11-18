@@ -1,4 +1,3 @@
-// src/pages/ResearchesPage.tsx
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header/Header';
@@ -32,12 +31,13 @@ export default function ResearchesPage() {
     try {
       const response = await api.researches.researchesList();
       
-      // Фильтруем: убираем черновики И показываем только исследования текущего пользователя
-      const filteredResearches = response.data.filter((research: any) => 
-        research.status !== 'draft' && research.creator_login === username
+      // Бэкенд уже возвращает только исследования текущего пользователя
+      // Убираем черновики, так как они отображаются в корзине
+      const researchesWithoutDrafts = response.data.filter((research: any) => 
+        research.status !== 'draft'
       );
       
-      setResearches(filteredResearches);
+      setResearches(researchesWithoutDrafts);
     } catch (error: any) {
       setError(error.response?.data?.description || 'Ошибка загрузки исследований');
     } finally {
