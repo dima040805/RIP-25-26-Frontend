@@ -207,13 +207,6 @@ const researchSlice = createSlice({
         }
         state.researchDetail.count = updatedPlanets.length;
       }
-    },
-    revertPlanetRemoval: (state) => {
-      // В реальном приложении здесь нужно восстановить предыдущее состояние
-      // Для простоты просто перезагружаем данные
-      if (state.researchDetail?.id) {
-        // Можно добавить логику для восстановления состояния
-      }
     }
   },
   extraReducers: (builder) => {
@@ -328,9 +321,7 @@ const researchSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
         // В случае ошибки перезагружаем актуальные данные
-        if (state.researchDetail?.id) {
-          // Можно добавить автоматическую перезагрузку или оставить как есть
-        }
+
       })
       
       // formResearch
@@ -348,5 +339,5 @@ const researchSlice = createSlice({
   },
 });
 
-export const { clearError, clearResearch, removePlanetOptimistic, revertPlanetRemoval } = researchSlice.actions;
+export const { clearError, clearResearch, removePlanetOptimistic } = researchSlice.actions;
 export default researchSlice.reducer;

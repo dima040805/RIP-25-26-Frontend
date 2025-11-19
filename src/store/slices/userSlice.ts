@@ -34,7 +34,7 @@ export const registerUser = createAsyncThunk(
       const response = await api.users.signUpCreate({
         login: userData.login,
         password: userData.password,
-        is_moderator: false // по умолчанию обычный пользователь
+        is_moderator: false 
       });
       return response.data;
     } catch (error: any) {

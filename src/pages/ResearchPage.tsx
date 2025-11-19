@@ -21,15 +21,20 @@ export default function ResearchPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   
-  const { researchDetail, loading } = useAppSelector(state => state.research);
+  const { researchDetail, loading, saveLoading } = useAppSelector(state => state.research);
   const { isAuthenticated } = useAppSelector(state => state.user);
   
   const [observationDate, setObservationDate] = useState('');
-  const [planetShines, setPlanetShines] = useState<{ [key: number]: number }>({});
   const [imageErrors, setImageErrors] = useState<{ [key: number]: boolean }>({});
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
   const researchId = id ? parseInt(id, 10) : null;
+
+  const showNotification = (type: 'success' | 'error', message: string) => {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   const isDraft = () => {
     const status = researchDetail?.research?.status || researchDetail?.status;
@@ -78,29 +83,8 @@ export default function ResearchPage() {
       } else if (researchDetail.date_research) {
         setObservationDate(researchDetail.date_research);
       }
-      
-      const shines: { [key: number]: number } = {};
-      const planets = getPlanets();
-      
-      planets.forEach(planet => {
-        if (planet.planet_shine !== undefined && planet.planet_shine !== null) {
-          shines[planet.id] = planet.planet_shine;
-        }
-      });
-      
-      setPlanetShines(shines);
     }
   }, [researchDetail]);
-
-  const handleShineChange = (planetId: number, value: string) => {
-    if (!isDraft()) return;
-    
-    const numValue = parseFloat(value) || 0;
-    setPlanetShines(prev => ({
-      ...prev,
-      [planetId]: numValue
-    }));
-  };
 
   const handleImageError = (planetId: number) => {
     setImageErrors(prev => ({
@@ -124,16 +108,20 @@ export default function ResearchPage() {
         researchId,
         date: observationDate
       })).unwrap();
-    } catch (error) {
-      // Просто игнорируем ошибки
+      
+      showNotification('success', 'Дата успешно сохранена!');
+    } catch (error: any) {
+      showNotification('error', 'Ошибка сохранения даты: ' + (error.message || 'Неизвестная ошибка'));
     }
   };
 
-  const handleSavePlanetShine = async (planetId: number) => {
+  const handleSavePlanetShine = async (planetId: number, shineValue: number) => {
     if (!researchId || !isDraft()) return;
     
-    const shineValue = planetShines[planetId];
-    if (shineValue === undefined) return;
+    if (shineValue <= 0 || shineValue > 4) {
+      showNotification('error', 'Падение блеска должно быть от 0.1% до 4%');
+      return;
+    }
     
     try {
       await dispatch(updatePlanetShine({
@@ -141,13 +129,19 @@ export default function ResearchPage() {
         researchId,
         shine: shineValue
       })).unwrap();
-    } catch (error) {
-      // Просто игнорируем ошибки
+      
+      showNotification('success', 'Падение блеска сохранено!');
+    } catch (error: any) {
+      showNotification('error', 'Ошибка сохранения блеска: ' + (error.message || 'Неизвестная ошибка'));
     }
   };
 
   const handleRemovePlanet = async (planetId: number) => {
     if (!researchId || !isDraft()) return;
+    
+    if (!window.confirm('Вы уверены, что хотите удалить планету из исследования?')) {
+      return;
+    }
     
     try {
       await dispatch(removeFromResearch({
@@ -155,37 +149,60 @@ export default function ResearchPage() {
         researchId
       })).unwrap();
       
-      // Перезагружаем данные после удаления
       dispatch(getResearchDetail(researchId));
-    } catch (error) {
-      // Просто игнорируем ошибки
+      showNotification('success', 'Планета удалена из исследования!');
+    } catch (error: any) {
+      showNotification('error', 'Ошибка удаления планеты: ' + (error.message || 'Неизвестная ошибка'));
     }
   };
 
   const handleDeleteResearch = async () => {
     if (!researchId || !isDraft()) return;
     
+    if (!window.confirm('Вы уверены, что хотите удалить это исследование?')) {
+      return;
+    }
+    
     try {
       await dispatch(deleteResearch(researchId)).unwrap();
-      navigate('/planets');
-    } catch (error) {
-      // Просто игнорируем ошибки
+      showNotification('success', 'Исследование удалено!');
+      setTimeout(() => navigate('/planets'), 1000);
+    } catch (error: any) {
+      showNotification('error', 'Ошибка удаления исследования: ' + (error.message || 'Неизвестная ошибка'));
     }
   };
 
   const handleSubmitResearch = async () => {
     if (!researchId || !isDraft()) return;
     
+    const planets = getPlanets();
+    const hasEmptyShine = planets.some(planet => {
+      return !planet.planet_shine || planet.planet_shine === 0;
+    });
+    
+    if (hasEmptyShine) {
+      showNotification('error', 'Заполните падение блеска для всех планет');
+      return;
+    }
+    
+    if (!observationDate) {
+      showNotification('error', 'Укажите дату исследования');
+      return;
+    }
+    
     setSubmitLoading(true);
     
     try {
       await dispatch(formResearch(researchId)).unwrap();
       
-      // Перезагружаем данные после подтверждения
-      dispatch(getResearchDetail(researchId));
+      showNotification('success', 'Исследование успешно подтверждено!');
       
-    } catch (error) {
-      // Просто игнорируем ошибки
+      setTimeout(() => {
+        navigate('/planets');
+      }, 2000);
+      
+    } catch (error: any) {
+      showNotification('error', 'Ошибка подтверждения: ' + (error.message || 'Неизвестная ошибка'));
     } finally {
       setSubmitLoading(false);
     }
@@ -240,6 +257,12 @@ export default function ResearchPage() {
           <p>Статус: <strong>{currentStatus}</strong></p>
         </div>
 
+        {notification && (
+          <div className={`notification ${notification.type}`}>
+            {notification.message}
+          </div>
+        )}
+
         <div className="date-section">
           <div className="date-input-container">
             <input  
@@ -254,9 +277,9 @@ export default function ResearchPage() {
               <button 
                 className="btn-save-date"
                 onClick={handleSaveDate}
-                disabled={!observationDate}
+                disabled={!observationDate || saveLoading.date}
               >
-                Сохранить дату
+                {saveLoading.date ? 'Сохранение...' : 'Сохранить дату'}
               </button>
             )}
           </div>
@@ -272,79 +295,18 @@ export default function ResearchPage() {
 
         {planets.length > 0 ? (
           <ul className="research-grid-list">
-            {planets.map((planet) => {
-              const shineValue = planetShines[planet.id] ?? planet.planet_shine ?? '';
-              
-              return (
-                <li key={planet.id}>
-                  <div className="research-item">
-                    <a href={`/planets/${planet.id}`} className="research-item-thumbnail">
-                      <img 
-                        src={getImageUrl(planet)}
-                        alt={planet.name}
-                        onError={() => handleImageError(planet.id)}
-                        style={{ 
-                          width: '409.33px', 
-                          height: '241.68px', 
-                          objectFit: 'contain', 
-                          background: 'black' 
-                        }}
-                      />
-                    </a>
-
-                    <a href={`/planets/${planet.id}`} className="research-item-heading">
-                      <div className="research-planet-name">{planet.name}</div>
-                    </a>
-
-                    <div className="star-radius-value">
-                      <span>{planet.star_radius} км</span>
-                    </div>
-                    
-                    {isDraft() ? (
-                      <div className="shine-input-container">
-                        <input 
-                          type="number" 
-                          step="0.01"
-                          min="0"
-                          max="100"
-                          className="content-list-section shine-input"
-                          placeholder="Введите падение ~1%" 
-                          value={shineValue}
-                          onChange={(e) => handleShineChange(planet.id, e.target.value)}
-                        />
-                        <button 
-                          className="btn-save-shine"
-                          onClick={() => handleSavePlanetShine(planet.id)}
-                          disabled={shineValue === 0}
-                        >
-                          Сохранить
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="shine-value">
-                        {shineValue ? `${shineValue}%` : '—'}
-                      </div>
-                    )}
-
-                    <div className="calculated-radius">
-                      {planet.planet_radius ? `${planet.planet_radius} км` : '—'}
-                    </div>
-
-                    {isDraft() && (
-                      <div className="planet-actions">
-                        <button 
-                          className="btn-remove-planet"
-                          onClick={() => handleRemovePlanet(planet.id)}
-                          title="Удалить планету из исследования"
-                        >
-                          <img src={deleteIcon} alt="Удалить" className="delete-icon" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
+            {planets.map((planet) => (
+              <PlanetRow 
+                key={planet.id}
+                planet={planet}
+                isDraft={isDraft()}
+                onSaveShine={handleSavePlanetShine}
+                onRemovePlanet={handleRemovePlanet}
+                saveLoading={saveLoading}
+                getImageUrl={getImageUrl}
+                handleImageError={handleImageError}
+              />
+            ))}
           </ul>
         ) : (
           <div className="empty-research">
@@ -382,5 +344,100 @@ export default function ResearchPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Выносим строку планеты в отдельный компонент
+function PlanetRow({ 
+  planet, 
+  isDraft, 
+  onSaveShine, 
+  onRemovePlanet, 
+  saveLoading, 
+  getImageUrl, 
+  handleImageError 
+}: any) {
+  const [localShine, setLocalShine] = useState(planet.planet_shine || '');
+
+  const handleShineChange = (value: string) => {
+    if (!isDraft) return;
+    setLocalShine(value);
+  };
+
+  const handleSave = () => {
+    const shineValue = parseFloat(localShine);
+    if (!isNaN(shineValue)) {
+      onSaveShine(planet.id, shineValue);
+    }
+  };
+
+  return (
+    <li>
+      <div className="research-item">
+        <a href={`/planets/${planet.id}`} className="research-item-thumbnail">
+          <img 
+            src={getImageUrl(planet)}
+            alt={planet.name}
+            onError={() => handleImageError(planet.id)}
+            style={{ 
+              width: '409.33px', 
+              height: '241.68px', 
+              objectFit: 'contain', 
+              background: 'black' 
+            }}
+          />
+        </a>
+
+        <a href={`/planets/${planet.id}`} className="research-item-heading">
+          <div className="research-planet-name">{planet.name}</div>
+        </a>
+
+        <div className="star-radius-value">
+          <span>{planet.star_radius} км</span>
+        </div>
+        
+        {isDraft ? (
+          <div className="shine-input-container">
+            <input 
+              type="number" 
+              step="0.1"
+              min="0.1"
+              max="4"
+              className="content-list-section shine-input"
+              placeholder="Введите падение ~1%" 
+              value={localShine}
+              onChange={(e) => handleShineChange(e.target.value)}
+            />
+            <button 
+              className="btn-save-shine"
+              onClick={handleSave}
+              disabled={saveLoading.planets?.[planet.id] || !localShine || parseFloat(localShine) < 0.1 || parseFloat(localShine) > 4}
+            >
+              {saveLoading.planets?.[planet.id] ? '...' : 'Сохранить'}
+            </button>
+          </div>
+        ) : (
+          <div className="shine-value">
+            {planet.planet_shine ? `${planet.planet_shine}%` : '—'}
+          </div>
+        )}
+
+        <div className="calculated-radius">
+          {planet.planet_radius ? `${planet.planet_radius} км` : '—'}
+        </div>
+
+        {isDraft && (
+          <div className="planet-actions">
+            <button 
+              className="btn-remove-planet"
+              onClick={() => onRemovePlanet(planet.id)}
+              title="Удалить планету из исследования"
+            >
+              <img src={deleteIcon} alt="Удалить" className="delete-icon" />
+            </button>
+          </div>
+        )}
+      </div>
+    </li>
   );
 }
