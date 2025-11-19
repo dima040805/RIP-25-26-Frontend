@@ -55,10 +55,6 @@ export default function Header() {
               <Link to="/researches" className="nav-link">Мои исследования</Link>
               <Link to="/profile" className="nav-link">Личный кабинет</Link>
               
-              {/* ДОБАВЛЕНА КНОПКА ДЛЯ МОДЕРАТОРА */}
-              <Link to="/moderator" className="nav-link moderator-link">
-                Панель модератора
-              </Link>
             </>
           )}
         </div>
@@ -86,11 +82,7 @@ export default function Header() {
           <>
             <Link to="/researches" onClick={() => setIsMenuOpen(false)}>Мои исследования</Link>
             <Link to="/profile" onClick={() => setIsMenuOpen(false)}>Личный кабинет</Link>
-            
-            {/* ДОБАВЛЕНА КНОПКА ДЛЯ МОДЕРАТОРА В МОБИЛЬНОМ МЕНЮ */}
-            <Link to="/moderator" onClick={() => setIsMenuOpen(false)} className="moderator-link">
-              Панель модератора
-            </Link>
+
             
             <div className="mobile-user-info">
               <span className="mobile-username">Пользователь: {username}</span>

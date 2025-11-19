@@ -194,9 +194,7 @@ export default function ModeratorDashboard() {
         <div className="moderator-header">
           <h1>Панель модератора</h1>
           <p>Управление исследованиями пользователей</p>
-          <div className="polling-indicator">
-            Auto-refresh: {pollingCount} 
-          </div>
+
         </div>
 
         {error && (

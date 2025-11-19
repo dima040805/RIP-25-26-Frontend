@@ -21,15 +21,21 @@ export default function ResearchPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   
-  const { researchDetail, loading } = useAppSelector(state => state.research);
+  const { researchDetail, loading, saveLoading, error } = useAppSelector(state => state.research);
   const { isAuthenticated } = useAppSelector(state => state.user);
   
   const [observationDate, setObservationDate] = useState('');
   const [planetShines, setPlanetShines] = useState<{ [key: number]: number }>({});
   const [imageErrors, setImageErrors] = useState<{ [key: number]: boolean }>({});
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
   const researchId = id ? parseInt(id, 10) : null;
+
+  const showNotification = (type: 'success' | 'error', message: string) => {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   const isDraft = () => {
     const status = researchDetail?.research?.status || researchDetail?.status;
@@ -79,6 +85,7 @@ export default function ResearchPage() {
         setObservationDate(researchDetail.date_research);
       }
       
+      // Инициализируем значения блеска
       const shines: { [key: number]: number } = {};
       const planets = getPlanets();
       
@@ -124,8 +131,10 @@ export default function ResearchPage() {
         researchId,
         date: observationDate
       })).unwrap();
-    } catch (error) {
-      // Просто игнорируем ошибки
+      
+      showNotification('success', 'Дата успешно сохранена!');
+    } catch (error: any) {
+      showNotification('error', 'Ошибка сохранения даты');
     }
   };
 
@@ -141,8 +150,10 @@ export default function ResearchPage() {
         researchId,
         shine: shineValue
       })).unwrap();
-    } catch (error) {
-      // Просто игнорируем ошибки
+      
+      showNotification('success', 'Данные планеты успешно сохранены!');
+    } catch (error: any) {
+      showNotification('error', 'Ошибка сохранения данных планеты');
     }
   };
 
@@ -155,21 +166,25 @@ export default function ResearchPage() {
         researchId
       })).unwrap();
       
-      // Перезагружаем данные после удаления
       dispatch(getResearchDetail(researchId));
-    } catch (error) {
-      // Просто игнорируем ошибки
+      showNotification('success', 'Планета удалена из исследования!');
+    } catch (error: any) {
+      showNotification('error', 'Ошибка удаления планеты');
     }
   };
 
   const handleDeleteResearch = async () => {
     if (!researchId || !isDraft()) return;
     
+    if (!window.confirm('Вы уверены, что хотите удалить это исследование?')) {
+      return;
+    }
+    
     try {
       await dispatch(deleteResearch(researchId)).unwrap();
       navigate('/planets');
-    } catch (error) {
-      // Просто игнорируем ошибки
+    } catch (error: any) {
+      showNotification('error', 'Ошибка удаления исследования');
     }
   };
 
@@ -181,15 +196,26 @@ export default function ResearchPage() {
     try {
       await dispatch(formResearch(researchId)).unwrap();
       
-      // Перезагружаем данные после подтверждения
-      dispatch(getResearchDetail(researchId));
+      showNotification('success', 'Исследование успешно подтверждено!');
       
-    } catch (error) {
-      // Просто игнорируем ошибки
+      setTimeout(() => {
+        dispatch(getResearchDetail(researchId));
+      }, 1000);
+      
+    } catch (error: any) {
+      // Ошибка будет обработана в slice и попадет в error
+      showNotification('error', 'Ошибка при подтверждении исследования');
     } finally {
       setSubmitLoading(false);
     }
   };
+
+  // Показываем ошибки из Redux store
+  useEffect(() => {
+    if (error) {
+      showNotification('error', error);
+    }
+  }, [error]);
 
   if (loading) {
     return (
@@ -238,7 +264,17 @@ export default function ResearchPage() {
           <h1>Планеты для исследования #{researchDisplayId}</h1>
           <p>Всего планет: {planets.length}</p>
           <p>Статус: <strong>{currentStatus}</strong></p>
+          <p>Создатель: {researchData?.creator_login || 'Неизвестно'}</p>
+          {researchData?.moderator_login && (
+            <p>Модератор: {researchData.moderator_login}</p>
+          )}
         </div>
+
+        {notification && (
+          <div className={`notification ${notification.type}`}>
+            {notification.message}
+          </div>
+        )}
 
         <div className="date-section">
           <div className="date-input-container">
@@ -254,9 +290,9 @@ export default function ResearchPage() {
               <button 
                 className="btn-save-date"
                 onClick={handleSaveDate}
-                disabled={!observationDate}
+                disabled={saveLoading.date || !observationDate}
               >
-                Сохранить дату
+                {saveLoading.date ? 'Сохранение...' : 'Сохранить дату'}
               </button>
             )}
           </div>
@@ -304,7 +340,7 @@ export default function ResearchPage() {
                       <div className="shine-input-container">
                         <input 
                           type="number" 
-                          step="0.01"
+                          step="0.1"
                           min="0"
                           max="100"
                           className="content-list-section shine-input"
@@ -315,9 +351,9 @@ export default function ResearchPage() {
                         <button 
                           className="btn-save-shine"
                           onClick={() => handleSavePlanetShine(planet.id)}
-                          disabled={shineValue === 0}
+                          disabled={saveLoading.planets?.[planet.id] || shineValue === ''}
                         >
-                          Сохранить
+                          {saveLoading.planets?.[planet.id] ? '...' : 'Сохранить'}
                         </button>
                       </div>
                     ) : (
